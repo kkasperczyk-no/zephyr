@@ -281,6 +281,13 @@ config OPENTHREAD_NCP_SPINEL_ON_UART_ACM
 	help
 	  Is the SPINEL device a USB-CDC-ACM device
 
+config OPENTHREAD_NCP_VENDOR_HOOK
+	bool "Enables NCP vendor hooks"
+	default n
+	#depends on OPENTHREAD_NCP && USB_CDC_ACM
+	help
+	  Enables attaching vendor hooks for Network Co-Processor component
+
 config OPENTHREAD_UDP_FORWARD
 	bool "UDP forward support"
 	help

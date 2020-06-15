@@ -53,6 +53,12 @@ if(NOT CONFIG_LOG_MINIMAL)
     CONFIG_LOG_BACKEND_RB
     log_backend_rb.c
   )
+
+  zephyr_sources_ifdef(
+    CONFIG_LOG_BACKEND_SPINEL
+    log_backend_spinel.c
+  )
+
 else()
   zephyr_sources(log_minimal.c)
 endif()
