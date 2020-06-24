@@ -19,6 +19,11 @@ LOG_MODULE_REGISTER(LOG_MODULE_NAME);
 
 #define LOG_PARSE_BUFFER_SIZE  128
 
+#ifndef OPENTHREAD_CONFIG_LOG_OUTPUT
+#define OPENTHREAD_CONFIG_LOG_OUTPUT CONFIG_LOG_OUTPUT//OPENTHREAD_CONFIG_LOG_OUTPUT_PLATFORM_DEFINED
+#endif
+
+#if OPENTHREAD_CONFIG_LOG_OUTPUT!=4//OPENTHREAD_CONFIG_LOG_OUTPUT_NCP_SPINEL
 void otPlatLog(otLogLevel aLogLevel, otLogRegion aLogRegion,
 	       const char *aFormat, ...)
 {
@@ -54,3 +59,4 @@ void otPlatLog(otLogLevel aLogLevel, otLogRegion aLogRegion,
 		break;
 	}
 }
+#endif

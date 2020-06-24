@@ -44,6 +44,19 @@ config LOG_DEFAULT_LEVEL
 	  - 3 INFO, default to write LOG_LEVEL_INFO
 	  - 4 DEBUG, default to write LOG_LEVEL_DBG
 
+config LOG_OUTPUT
+	int "Selected log output"
+	default 3
+	range 0 4
+	help
+	  Sets log output
+
+	  - 0 NONE
+	  - 1 DEBUG UART
+	  - 2 APP, otPlatLog() method provided by CLI or NCP application code
+	  - 3 PLATFORM DEFINED, handled by platform defined method
+	  - 4 NCP SPINEL, SPINEL protocol
+
 config LOG_OVERRIDE_LEVEL
 	int "Override lowest log level"
 	default 0
@@ -423,6 +436,20 @@ config LOG_BACKEND_RTT_FORCE_PRINTK
 	select LOG_PRINTK
 
 endif # LOG_BACKEND_RTT
+
+config LOG_BACKEND_SPINEL
+	bool "Enable Spinel protocol backend"
+	#depends on CONFIG_LOG_OUTPUT=4
+	default n
+	help
+	  When enabled, backend will use SPINEL protocol for logging. This protocol
+	  is byte oriented and wrapps given messages into serial frames.
+
+config LOG_BACKEND_SPINEL_BUFFER_SIZE
+	int "Size of reserved up-buffer for logger output."
+	default 1024
+	help
+	  Specify reserved size of up-buffer used for logger output.
 
 config LOG_BACKEND_NATIVE_POSIX
 	bool "Enable native backend"
