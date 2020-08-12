@@ -42,4 +42,18 @@ config IEEE802154_NRF5_EXT_IRQ_MGMT
 	  the system. One example of external radio IRQ provider could be
 	  a radio arbiter used in dynamic multiprotocol applications.
 
+config IEEE802154_NRF5_VENDOR_OUI
+	int "Vendor Organizationally Unique Identifier"
+	default 16043574
+	help
+	  Custom vendor OUI for OpenThread,
+	  which makes 24 oldest bits of MAC address
+
+config IEEE802154_NRF5_EUI64_CUSTOM_SOURCE
+	bool "Custom EUI64 source support"
+	help
+	  Enable providing EUI64 address
+	  by custom, user implemented
+	  nrf5_get_eui64() method
+
 endif
