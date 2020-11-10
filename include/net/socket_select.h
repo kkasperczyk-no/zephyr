@@ -16,14 +16,24 @@
 
 #include <zephyr/types.h>
 
+#ifdef CONFIG_POSIX_API
+#include <sys/_timeval.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 struct zsock_timeval {
+#ifdef CONFIG_POSIX_API
+	/* Rely on the standard libc types */
+	time_t tv_sec;
+	suseconds_t tv_usec;
+#else
 	/* Using longs, as many (?) implementations seem to use it. */
 	long tv_sec;
 	long tv_usec;
+#endif
 };
 
 typedef struct zsock_fd_set {
