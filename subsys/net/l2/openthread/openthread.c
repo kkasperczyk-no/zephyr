@@ -386,6 +386,11 @@ int openthread_start(struct openthread_context *ot_context)
 
 		otThreadSetLinkMode(ot_context->instance, ot_mode);
 		otLinkSetPollPeriod(ot_context->instance, OT_POLL_PERIOD);
+		/*
+		 * Put 1250 for 200 ms period
+		 * Put 12500 for 2000 ms period
+		 */
+		otLinkCslSetPeriod(ot_context->instance, 12500);
 	}
 
 	if (otDatasetIsCommissioned(ot_instance)) {
