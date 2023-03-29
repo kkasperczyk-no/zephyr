@@ -17,6 +17,8 @@ struct settings_list_callback_params {
 	const char *subtree;
 };
 
+static uint32_t settings_size;
+
 static int settings_list_callback(const char      *key,
 				  size_t len,
 				  settings_read_cb read_cb,
@@ -29,11 +31,21 @@ static int settings_list_callback(const char      *key,
 
 	struct settings_list_callback_params *params = param;
 
+	uint32_t val_len = len % 4 == 0 ? len : (len + (4 - (len % 4)));
+	uint32_t name_len;
+
 	if (params->subtree != NULL) {
-		shell_print(params->shell_ptr, "%s/%s", params->subtree, key);
+		uint32_t unaligned_name_len = strlen(params->subtree) +  strlen(key) + 1;
+		name_len = unaligned_name_len % 4 == 0 ? unaligned_name_len : (unaligned_name_len + (4 - (unaligned_name_len % 4)));
+		shell_print(params->shell_ptr, "%s/%s val size: %d aligned: %d, name size: %d, aligned: %d", params->subtree, key, len, val_len, unaligned_name_len, name_len);
 	} else {
-		shell_print(params->shell_ptr, "%s", key);
+		uint32_t unaligned_name_len = strlen(key);
+		name_len = unaligned_name_len % 4 == 0 ? unaligned_name_len : (unaligned_name_len + (4 - (unaligned_name_len % 4)));
+		shell_print(params->shell_ptr, "%s val size: %d aligned: %d, name size: %d, aligned: %d", key, len, val_len, unaligned_name_len, name_len);
 	}
+
+	settings_size += val_len + name_len + 16 /*metadata*/;
+	shell_print(params->shell_ptr, "Settings size: %d", settings_size);
 
 	return 0;
 }
@@ -41,6 +53,8 @@ static int settings_list_callback(const char      *key,
 static int cmd_list(const struct shell *shell_ptr, size_t argc, char *argv[])
 {
 	int err;
+
+	settings_size = 0;
 
 	struct settings_list_callback_params params = {
 		.shell_ptr = shell_ptr,
